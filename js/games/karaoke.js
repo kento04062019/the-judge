@@ -48,6 +48,44 @@ export function render(container) {
   container.appendChild(board);
 }
 
+// YouTube サビ再生ポップアップ
+function showYouTubePopup(item) {
+  if (!item.yt) return;
+  const existing = document.getElementById('yt-popup');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'yt-popup';
+  overlay.className = 'yt-popup-overlay';
+  overlay.innerHTML = `
+    <div class="yt-popup-card">
+      <div class="yt-popup-header">
+        <span class="yt-popup-title">${item.rank}位 - ${item.title} / ${item.artist}</span>
+        <button class="yt-popup-close" id="yt-close">✕</button>
+      </div>
+      <div class="yt-popup-player">
+        <iframe
+          src="https://www.youtube.com/embed/${item.yt.id}?autoplay=1&start=${item.yt.start}&rel=0"
+          frameborder="0"
+          allow="autoplay; encrypted-media"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  // 閉じるボタン
+  document.getElementById('yt-close').addEventListener('click', () => overlay.remove());
+  // オーバーレイクリックでも閉じる
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+
+  // 10秒後に自動で閉じる
+  setTimeout(() => { if (document.getElementById('yt-popup')) overlay.remove(); }, 12000);
+}
+
 function matchSong(input) {
   const q = input.toLowerCase();
   for (const item of KARAOKE_DATA) {
@@ -102,6 +140,10 @@ export function judge(input) {
     }
 
     showFeedback(`正解！ ${matched.rank}位：${matched.title} / ${matched.artist}`, 'correct');
+
+    // サビ再生ポップアップ（少し遅延して表示）
+    setTimeout(() => showYouTubePopup(matched), 800);
+
     return { type: 'correct', ...matched };
   }
 

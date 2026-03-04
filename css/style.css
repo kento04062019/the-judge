@@ -496,6 +496,80 @@ html, body {
   text-align: center;
 }
 
+/* ===== YOUTUBE POPUP ===== */
+.yt-popup-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 9995;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.yt-popup-card {
+  background: #1a1a2e;
+  border: 2px solid #e91e63;
+  border-radius: 16px;
+  overflow: hidden;
+  width: 90%;
+  max-width: 640px;
+  box-shadow: 0 0 40px rgba(233, 30, 99, 0.3);
+}
+
+.yt-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 1rem;
+  background: #141428;
+  border-bottom: 1px solid #2a2a4a;
+}
+
+.yt-popup-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #e91e63;
+}
+
+.yt-popup-close {
+  background: transparent;
+  border: 1px solid #555;
+  color: #aaa;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.yt-popup-close:hover {
+  border-color: #ff5252;
+  color: #ff5252;
+}
+
+.yt-popup-player {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+}
+
+.yt-popup-player iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .logo { font-size: 2.5rem; }
