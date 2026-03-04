@@ -64,8 +64,6 @@ function matchSong(input) {
         if (alias.toLowerCase().includes(q)) return item;
       }
     }
-    // アーティスト名でもマッチ（4文字以上）
-    if (q.length >= 4 && item.artist.toLowerCase().includes(q)) return item;
   }
   return null;
 }
