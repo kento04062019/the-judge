@@ -58,7 +58,7 @@ export function playDuplicate() {
 function createBGM() {
   const ctx = getCtx();
   const masterGain = ctx.createGain();
-  masterGain.gain.value = 0.08;
+  masterGain.gain.value = 0.03;
   masterGain.connect(ctx.destination);
 
   // コード進行 (Cmaj7 - Am7 - Dm7 - G7 のループ)
