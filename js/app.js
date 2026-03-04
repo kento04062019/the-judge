@@ -2,6 +2,7 @@
 
 import * as karaoke from './games/karaoke.js';
 import * as movie from './games/movie.js';
+import { KARAOKE_DATA, MOVIE_DATA } from './data.js';
 import { startBGM, toggleBGM, isBGMEnabled, initAudio } from './sound.js';
 
 const games = { karaoke, movie };
@@ -57,6 +58,7 @@ function renderMenu() {
       </div>
       <div class="menu-footer">
         <button class="btn-bgm" id="btn-bgm">${isBGMEnabled() ? '🔊 BGM ON' : '🔇 BGM OFF'}</button>
+        <button class="btn-answers" id="btn-answers">📋 答え確認</button>
       </div>
     </div>
   `;
@@ -75,6 +77,9 @@ function renderMenu() {
     const on = toggleBGM();
     document.getElementById('btn-bgm').textContent = on ? '🔊 BGM ON' : '🔇 BGM OFF';
   });
+
+  // 答え確認ボタン
+  document.getElementById('btn-answers').addEventListener('click', () => navigate('answers'));
 }
 
 // ゲーム画面
@@ -145,11 +150,53 @@ function renderGame(gameId) {
   document.getElementById('game-input').focus();
 }
 
+// 答え確認画面
+function renderAnswers() {
+  const app = document.getElementById('app');
+  app.innerHTML = `
+    <div class="game-screen" style="--game-color: var(--gold); --game-dark: #333">
+      <header class="game-header">
+        <button class="btn-back" id="btn-back">◀ 戻る</button>
+        <div class="header-center">
+          <span class="header-title">📋 答え一覧</span>
+        </div>
+        <div class="header-right"></div>
+      </header>
+      <main class="game-main answers-main" id="answers-container">
+        <div class="answers-wrap">
+          <section class="answers-section">
+            <h2 class="answers-heading" style="color: #e91e63">🎤 カラオケ TOP30</h2>
+            <table class="answers-table">
+              <thead><tr><th>順位</th><th>曲名</th><th>アーティスト</th></tr></thead>
+              <tbody>
+                ${KARAOKE_DATA.map(s => `<tr><td>${s.rank}</td><td>${s.title}</td><td>${s.artist}</td></tr>`).join('')}
+              </tbody>
+            </table>
+          </section>
+          <section class="answers-section">
+            <h2 class="answers-heading" style="color: #2196f3">🎬 映画 TOP30</h2>
+            <table class="answers-table">
+              <thead><tr><th>順位</th><th>作品名</th><th>興行収入</th></tr></thead>
+              <tbody>
+                ${MOVIE_DATA.map(m => `<tr><td>${m.rank}</td><td>${m.title}</td><td>${m.revenue}</td></tr>`).join('')}
+              </tbody>
+            </table>
+          </section>
+        </div>
+      </main>
+    </div>
+  `;
+  document.getElementById('btn-back').addEventListener('click', () => navigate('menu'));
+}
+
 // ルーター
 function onRoute() {
   const route = getRoute();
   if (route === 'menu') {
     renderMenu();
+    currentGame = null;
+  } else if (route === 'answers') {
+    renderAnswers();
     currentGame = null;
   } else {
     renderGame(route);
